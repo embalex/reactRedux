@@ -12,12 +12,8 @@
         "baseUrl": ".",
         "paths": {
             "*": ["*"],
-            "helpers/jest": ["helpers/jest"],
-            "helpers/jest/*": ["helpers/jest/*"],
-            "helpers/storybook": ["helpers/storybook"],
-            "helpers/storybook/*": ["helpers/storybook/*"],
-            "helpers/types": ["helpers/types"],
-            "helpers/types/*": ["helpers/types/*"]
+            "clientSrc": ["client/src"],
+            "clientSrc/*": ["client/src/*"]
         },
         "skipLibCheck": true,
         "sourceMap": true,
