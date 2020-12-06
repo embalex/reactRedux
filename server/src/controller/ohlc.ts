@@ -3,6 +3,7 @@ import * as yup from 'yup';
 
 import { Error } from '../error';
 import { service } from '../service';
+import { wait } from '../utils';
 
 
 const validateYear = (value: unknown): number | never => {
@@ -11,7 +12,7 @@ const validateYear = (value: unknown): number | never => {
 };
 
 export const ohlcController = (router: IRouter) => {
-    router.get('/candles_by_year', (request, response) => {
+    router.get('/candles_by_year', async (request, response) => {
         const { year: queryYear } = request.query;
         let year: number;
 
@@ -22,6 +23,7 @@ export const ohlcController = (router: IRouter) => {
         }
 
         try {
+            await wait(100);
             response.send(service.ohlc.getByYear(year));
         } catch (error) {
             throw new Error.InvalidRequest(error.message, request);

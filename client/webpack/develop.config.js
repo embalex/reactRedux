@@ -92,9 +92,10 @@ module.exports = (env, argv) => {
             port: CLIENT_STATIC_PORT,
             historyApiFallback: true,
             proxy: {
-                context: ['/api'],
-                target: `http://localhost:${SERVER_PORT}/`,
-                secure: false,
+                '/api': {
+                    target: ['http://localhost', SERVER_PORT].join(':'),
+                    secure: false,
+                },
             },
         },
         watch: true,

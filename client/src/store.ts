@@ -1,4 +1,7 @@
-import { combineReducers, createStore } from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
+import createSagaMiddleware from 'redux-saga';
+
+import { Error } from 'clientSrc/utils';
 
 
 /** Собираем все редюсеры (*.reducers.ts) */
@@ -10,25 +13,41 @@ const reducers = models.keys().reduce((acc, filename) => {
     const { namespace } = model;
     const modelKeys = Object.keys(model);
 
-    if ((modelKeys.length !== 2) && (namespace === undefined)) {
-        throw new Error(`[ArgumentError]. Model ${filename} is invalid`);
+    if (namespace === undefined) {
+        throw new Error.Argument(`Model ${filename} does not have namespace`);
     }
 
-    const objectWithReducerName = modelKeys.filter((value) => value !== 'namespace')[0];
+    const objectsWithReducerName = modelKeys
+        .filter((value) => model[value]?.reducer !== undefined);
+
+    if (objectsWithReducerName.length !== 1) {
+        throw new Error.Argument(`Model ${filename} does not have (or have more than 1) reducer`);
+    }
+
 
     return {
         ...acc,
-        [namespace]: model[objectWithReducerName].reducer,
+        [namespace]: model[objectsWithReducerName[0]].reducer,
     };
 }, {});
 
-export const store = createStore(combineReducers(reducers));
 
-//
-// const sagaMiddleware = createSagaMiddleware()
-// const store = createStore(
-//     reducer,
-//     applyMiddleware(sagaMiddleware)
-// )
-//
-// sagaMiddleware.run(helloSaga);
+const sagaMiddleware = createSagaMiddleware();
+export const store = createStore(
+    combineReducers(reducers),
+    applyMiddleware(sagaMiddleware),
+);
+
+// Start sagas
+models.keys().forEach((filename) => {
+    const model = models(filename);
+    const modelKeys = Object.keys(model);
+
+    const objectsWithSagaName = modelKeys
+        .filter((value) => model[value]?.reducer !== undefined);
+
+    objectsWithSagaName.forEach((key) => {
+        sagaMiddleware.run(model[key].saga);
+    });
+});
+

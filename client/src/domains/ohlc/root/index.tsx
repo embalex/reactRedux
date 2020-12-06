@@ -4,18 +4,20 @@ import { noop } from 'lodash';
 
 import { Error, Loader } from 'clientSrc/components';
 import {
-    isContentResource,
     isErrorResource,
     isLoadingResource,
-    isUndefinedResource,
+    isUndefinedResource, useAction,
 } from 'clientSrc/utils';
 
 import { Content } from './Content';
 import { ohlcModel } from './model';
+import { IRange } from './model/types';
 
 
 export const OHLCPage: React.FC = () => {
+    const getReducedCandlesByYear = useAction(ohlcModel.action.getReducedCandlesByYear);
     const candlesRange = useSelector(ohlcModel.selector.candlesRange);
+    const onRequest = (formValues: IRange) => getReducedCandlesByYear(formValues);
 
     if (isLoadingResource(candlesRange)) {
         return <Loader />;
@@ -26,13 +28,14 @@ export const OHLCPage: React.FC = () => {
     }
 
     if (isUndefinedResource(candlesRange)) {
-        return <Content onRequest={(value) => console.log(value)} />;
+        return <Content onRequest={onRequest} />;
     }
+
 
     const { year, value } = candlesRange.content;
     return (
         <Content
-            onRequest={(formValue) => console.log(formValue)}
+            onRequest={onRequest}
             minYear={year.min}
             maxYear={year.max}
             minValue={value.min}

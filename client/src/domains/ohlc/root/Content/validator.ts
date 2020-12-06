@@ -6,9 +6,13 @@ interface IForm {
     max?: string;
 }
 
-const fieldValidate = (value: string | undefined): string | null => {
+const yearValidate = (value: string | undefined): string | null => {
     if (value === undefined) {
-        return 'Required';
+        return null;
+    }
+
+    if (!Number.isInteger(Number(value))) {
+        return 'Should be a integer';
     }
 
     if (Number(value) < MIN_YEAR) {
@@ -24,8 +28,8 @@ const fieldValidate = (value: string | undefined): string | null => {
 
 
 export const validator = (value?: IForm): {} => {
-    const minFieldValidationError = fieldValidate(value?.min);
-    const maxFieldValidationError = fieldValidate(value?.max);
+    const minFieldValidationError = yearValidate(value?.min);
+    const maxFieldValidationError = yearValidate(value?.max);
 
     if ((minFieldValidationError !== null) || (maxFieldValidationError !== null)) {
         return {
