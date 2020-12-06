@@ -8,6 +8,7 @@ import { MAX_YEAR, MIN_YEAR } from '../model';
 import { IRange } from '../model/types';
 import { validator } from './validator';
 import { YearInput } from './YearInput';
+import { SubmitButton } from './SubmitButton';
 
 
 interface IProps {
@@ -27,10 +28,6 @@ const useClasses = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    button: {
-        width: theme.calculateSpacing(28),
-        marginTop: theme.calculateSpacing(5),
     },
     inputBlock: {
         display: 'flex',
@@ -72,14 +69,7 @@ export const Content: React.FC<IProps> = ({
                     <YearInput name="min" description="Year from" />
                     <YearInput name="max" description="Year to" />
                     {candleRangeInfo}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                        onClick={handleSubmit}
-                    >
-                        Get candle range
-                    </Button>
+                    <SubmitButton />
                 </div>
             )}
         />
