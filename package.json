@@ -4,13 +4,14 @@
 	"private": true,
 	"scripts": {
 		"server:build": "webpack --config ./server/webpack.js --progress",
-		"server:start": "pm2 start ./build/server/*.js --env env.json",
+		"server:start": "pm2 start ./build/server/*.js",
 		"server:stop": "pm2 stop all",
 		"server:monitor": "pm2 monit",
 		"server:clearList": "pm2 delete all",
 		"server:restart": "npm run server:build && (npm run server:stop || exit 0) && (npm run server:clearList || exit 0) && npm run server:start",
-		"build": "webpack --config ./webpack/build.config.js --progress",
-		"client:develop": "webpack-dev-server --config ./client/webpack/develop.config.js --progress"
+		"client:develop": "webpack-dev-server --config ./client/webpack/develop.config.js --progress",
+		"start:cold": "npm i && npm run server:build && npm run server:start && npm run client:develop",
+		"start:hot": "npm run server:restart && npm run client:develop"
 	},
 	"dependencies": {
 		"@material-ui/core": "4.9.14",
