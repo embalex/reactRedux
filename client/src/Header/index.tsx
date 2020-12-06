@@ -11,7 +11,7 @@ interface IProps {
 
 const useClasses = makeStyles((theme) => ({
     root: {
-        height: theme.calculateSpacing(3),
+        height: theme.calculateSpacing(5),
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -23,8 +23,8 @@ export const Header: React.FC<IProps> = ({ className }) => {
 
     return (
         <div className={clsx(classes.root, className)}>
-            <Typography variant="h4">
-                Header
+            <Typography variant="h6">
+                React & redux test project
             </Typography>
         </div>
     );

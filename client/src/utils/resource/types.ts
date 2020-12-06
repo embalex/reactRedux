@@ -25,3 +25,4 @@ export interface IUndefined {
 
 export type IResource<T, E extends Error = Error> = IContent<T> | IError<E> | ILoading;
 export type INullable<T> = IContent<T> | IUndefined;
+export type INullableResource<T> = IResource<T> | IUndefined;
